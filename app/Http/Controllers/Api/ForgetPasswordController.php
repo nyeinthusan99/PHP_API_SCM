@@ -21,19 +21,6 @@ class ForgetPasswordController extends Controller
     protected function sendResetLinkResponse(ForgotPasswordRequest $request)
         {
             //send link to mail
-            // $input = $request->only('email');
-
-            // $validator = Validator::make($input, [
-            //   'email' => "required|email"
-            // ]);
-
-            // if ($validator->fails()) {
-            //   return response()->json([
-            //     'success' => false,
-            //     'message' => 'Wrong',
-            //     'errors' => $validator->errors()
-            // ]);
-            // }
 
             $request->validated();
 

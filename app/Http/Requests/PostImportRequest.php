@@ -6,7 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class UserCreateRequest extends FormRequest
+class PostImportRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,11 +26,7 @@ class UserCreateRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|string',
-            'email' => 'required|email|unique:users',
-            'password' => 'required|min:8',
-            'phone' => 'required|numeric|regex:/(09)[0-9]{9}/',
-            'type'=>'required'
+            'file' => 'required|mimes:xlsx,csv,txt',
         ];
     }
 

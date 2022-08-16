@@ -2,6 +2,7 @@
 
 namespace App\Dao;
 use App\Models\Post;
+use Illuminate\Http\Request;
 use App\Contracts\Dao\PostDaoInterface;
 
 class PostDao implements PostDaoInterface
@@ -56,3 +57,5 @@ class PostDao implements PostDaoInterface
         return $post;
     }
 }
+
+

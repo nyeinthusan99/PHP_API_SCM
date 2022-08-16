@@ -15,7 +15,6 @@ class UsersExport implements FromCollection,WithHeadings
     {
         $user = User::select('name','email','type','phone','address','dob')->get();
         for($i=0;$i<count($user);$i++){
-            \Log::info($user[$i]);
         if($user[$i]->type == 0){
             $user[$i]->type = 'Admin';
         }else{

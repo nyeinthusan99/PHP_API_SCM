@@ -20,7 +20,7 @@ class UserSeeder extends Seeder
             'password' => bcrypt(11111111),
             'image' => 'storage/man.png',
             'type' => '0',
-            'phone' =>'113435',
+            'phone' =>'09784923448',
             'address' => 'Mandalay',
             'dob' =>'1999.1.11',
             // 'create_user_id' => 1,

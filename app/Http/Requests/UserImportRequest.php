@@ -5,9 +5,8 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
-use Illuminate\Validation\Rule;
 
-class UserUpdateRequest extends FormRequest
+class UserImportRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -27,10 +26,7 @@ class UserUpdateRequest extends FormRequest
     public function rules()
     {
         return [
-           'name' => 'required',
-           'email' => [Rule::unique("users","email")->ignore($id),'required'],
-           'type' => 'required',
-           'phone' => 'required|numeric|regex:/(09)[0-9]{9}/',
+            'file' => 'required|mimes:xlsx,csv,txt',
         ];
     }
 

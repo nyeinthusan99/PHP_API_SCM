@@ -11,7 +11,6 @@ use Illuminate\Support\Facades\Validator;
 class UsersImport implements ToCollection, WithHeadingRow
 {
 
-
     public function collection(Collection $rows)
     {
          Validator::make($rows->toArray(), [

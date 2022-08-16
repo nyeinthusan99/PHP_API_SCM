@@ -10,7 +10,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 use App\Http\Requests\UserRegisterRequest;
 use App\Http\Requests\UserLoginRequest;
-use App\Http\Requests\UserUpdateRequest;
 use App\Http\Requests\UserCreateRequest;
 use App\Contracts\Services\UserServiceInterface;
 
@@ -79,23 +78,22 @@ class PassportAuthController extends Controller
 
     //update
 
-    public function updateUser(UserUpdateRequest $request,$id,User $user)
+    public function updateUser(Request $request,$id,User $user)
     {
-        // $input = $request->all();
-        // $validator = Validator::make($input, [
-        //    'name' => 'required',
-        //    'email' => [Rule::unique("users","email")->ignore($id),'required'],
-        //    'type' => 'required',
-        //    'phone' => 'required|numeric|regex:/(09)[0-9]{9}/',
-        // ]);
-        // if($validator->fails()){
-        //     return response()->json([
-        //         'success' => false,
-        //         'message' => 'Wrong',
-        //         'errors' => $validator->errors()
-        //     ],422);
-        // }
-        $request->validated();
+        $input = $request->all();
+        $validator = Validator::make($input, [
+           'name' => 'required',
+           'email' => [Rule::unique("users","email")->ignore($id),'required'],
+           'type' => 'required',
+           'phone' => 'required|numeric|regex:/(09)[0-9]{9}/',
+        ]);
+        if($validator->fails()){
+            return response()->json([
+                'success' => false,
+                'message' => 'Wrong',
+                'errors' => $validator->errors()
+            ],422);
+        }
 
         $user = $this->userService->update($request,$id,$user);
 

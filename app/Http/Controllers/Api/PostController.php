@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-
+use Illuminate\Http\Request;
 use App\Models\Post;
 use App\Models\User;
 use Maatwebsite\Excel\Facades\Excel;
@@ -11,6 +11,8 @@ use App\Exports\PostsExport;
 use App\Imports\PostsImport;
 use Illuminate\Validation\Rule;
 use App\Http\Requests\PostCreateRequest;
+use App\Http\Requests\PostImportRequest;
+use Illuminate\Support\Facades\Validator;
 
 use App\Contracts\Services\PostServiceInterface;
 
@@ -63,6 +65,7 @@ class PostController extends Controller
     //update
     public function update(Request $request,Post $post)
     {
+
         $input = $request->all();
         $validator = Validator::make($input, [
         'title' => [Rule::unique("posts","title")->ignore($post->id)],
@@ -98,31 +101,15 @@ class PostController extends Controller
     }
 
     //import
-    public function import(Request $request,User $user)
+    public function import(PostImportRequest $request,User $user)
     {
+        $request->validated();
 
-        $input = $request->only(['file']);
-
-        $validate_data = [
-            'file' => 'required|mimes:xlsx,csv,txt',
-        ];
-
-        $validator = Validator::make($input, $validate_data);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Validation Error!',
-                'errors' => $validator->errors()
-            ],422);
-        }
         Excel::import(new PostsImport($request->user()->id), $request->file('file'));
         return response()->json([
         'result' => 1,
         'message' => 'Import successfully'
        ],200);
-
-
 
     }
 

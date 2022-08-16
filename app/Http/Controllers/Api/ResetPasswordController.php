@@ -18,17 +18,6 @@ class ResetPasswordController extends Controller
     //reset password
     protected function sendResetResponse(ResetPasswordRequest $request)
     {
-        // $input = $request->only('email','token', 'password', 'password_confirmation');
-
-        // $validator = Validator::make($input, [
-        //     'token' => 'required',
-        //     'email' => 'required|email',
-        //     'password' => 'required|confirmed|min:8',
-        // ]);
-
-        // if ($validator->fails()) {
-        //     return response(['errors'=>$validator->errors()->all()], 422);
-        // }
 
         $request->validated();
 

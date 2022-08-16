@@ -3,6 +3,7 @@
 namespace App\Services;
 use App\Contracts\Services\PostServiceInterface;
 use App\Contracts\Dao\PostDaoInterface;
+use Illuminate\Http\Request;
 
 class PostService implements PostServiceInterface
 {
