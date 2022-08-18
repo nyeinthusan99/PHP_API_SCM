@@ -68,7 +68,7 @@ class PostController extends Controller
 
         $input = $request->all();
         $validator = Validator::make($input, [
-        'title' => [Rule::unique("posts","title")->ignore($post->id)],
+        'title' => [Rule::unique("posts","title")->ignore($post->id),'required'],
         'description' => 'required',
         'user_id' => 'required'
         ]);
@@ -104,7 +104,6 @@ class PostController extends Controller
     public function import(PostImportRequest $request,User $user)
     {
         $request->validated();
-
         Excel::import(new PostsImport($request->user()->id), $request->file('file'));
         return response()->json([
         'result' => 1,

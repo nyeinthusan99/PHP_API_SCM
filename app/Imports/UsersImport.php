@@ -4,22 +4,16 @@ namespace App\Imports;
 
 use App\Models\User;
 use Illuminate\Support\Collection;
+use Maatwebsite\Excel\Concerns\WithValidation;
 use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Illuminate\Support\Facades\Validator;
 
-class UsersImport implements ToCollection, WithHeadingRow
+class UsersImport implements ToCollection,WithHeadingRow,WithValidation
 {
 
     public function collection(Collection $rows)
     {
-         Validator::make($rows->toArray(), [
-             '*.name' => 'required',
-             '*.email' => 'required|email|unique:users',
-             '*.password' => 'required|min:8',
-             '*.phone' => 'required|numeric|regex:/(09)[0-9]{9}/'
-         ])->validate();
-
          foreach ($rows as $row) {
                User::create([
                 'name' => $row['name'],
@@ -32,5 +26,15 @@ class UsersImport implements ToCollection, WithHeadingRow
                 'dob' =>$row['dob'],
             ]);
         }
+    }
+
+    public function rules(): array
+    {
+        return [
+            '*.name' => 'required',
+            '*.email' => 'required|email|unique:users',
+            '*.password' => 'required|min:8',
+            '*.phone' => 'required|numeric|regex:/(09)[0-9]{9}/'
+        ];
     }
 }
