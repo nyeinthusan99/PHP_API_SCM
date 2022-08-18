@@ -20,4 +20,6 @@ interface UserServiceInterface
     public function create($request);
 
     public function show($id);
+
+    public function changePassword($request);
 }

@@ -11,6 +11,7 @@ use Illuminate\Validation\Rule;
 use App\Http\Requests\UserRegisterRequest;
 use App\Http\Requests\UserLoginRequest;
 use App\Http\Requests\UserCreateRequest;
+use App\Http\Requests\PasswordChangeRequest;
 use App\Contracts\Services\UserServiceInterface;
 
 class PassportAuthController extends Controller
@@ -151,6 +152,25 @@ class PassportAuthController extends Controller
         "message" => "User retrieved successfully.",
         "data" => $user
         ]);
+    }
+
+    //change password
+
+    public function changePassword(PasswordChangeRequest $request)
+    {
+        $user = $this->userService->changePassword($request);
+
+        if(!$user){
+            return response()->json([
+                "success" => false,
+                "message" => "Old passsword is invalid"
+            ],400);
+        }
+        return response()->json([
+            "success" => true,
+            "message" => "Password can be changed successfully",
+            "data" => $user
+        ],200);
     }
 }
 

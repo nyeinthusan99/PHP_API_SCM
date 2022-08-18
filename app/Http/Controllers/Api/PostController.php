@@ -68,8 +68,8 @@ class PostController extends Controller
 
         $input = $request->all();
         $validator = Validator::make($input, [
-        'title' => [Rule::unique("posts","title")->ignore($post->id),'required'],
-        'description' => 'required',
+        'title' => [Rule::unique("posts","title")->ignore($post->id),'required','max:50'],
+        'description' => 'required|max:250',
         'user_id' => 'required'
         ]);
         if($validator->fails()){

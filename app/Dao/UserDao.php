@@ -9,6 +9,7 @@ use Laravel\Passport\TokenRepository;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use App\Contracts\Dao\UserDaoInterface;
 
 class UserDao implements UserDaoInterface
@@ -131,5 +132,16 @@ class UserDao implements UserDaoInterface
     {
         $user = User::find($id);
         return $user;
+    }
+
+    public function changePassword($request)
+    {
+        $user = User::find($request->user()->id);
+        //return $request->user()->id;
+        if(!Hash::check($request['oldPassword'],$user->password)){
+            return false;
+        }else{
+            return User::where('id', '=', $request->user()->id )->update(['password' => Hash::make($request['newPassword'])]);
+        }
     }
 }

@@ -6,7 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class PostCreateRequest extends FormRequest
+class PasswordChangeRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,9 +26,8 @@ class PostCreateRequest extends FormRequest
     public function rules()
     {
         return [
-            'title' => 'required|max:50|unique:posts',
-            'description' => 'required|max:250',
-            'user_id' => 'required'
+            'oldPassword' => 'required',
+            'newPassword' => 'required|min:8'
         ];
     }
 
@@ -39,12 +38,5 @@ class PostCreateRequest extends FormRequest
             'message' => 'Validation Error!',
             'errors' => $validator->errors()
         ],422));
-    }
-
-    public function messages()
-    {
-        return [
-            'title.required' => 'Title is required',
-        ];
     }
 }

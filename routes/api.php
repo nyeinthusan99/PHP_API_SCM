@@ -31,6 +31,7 @@ Route::get('posts/export/{id}', [PostController::class, 'export']);
 Route::middleware('auth:api')->group(function () {
     Route::get('getUser', [PassportAuthController::class, 'userInfo']);
     Route::get('userLists', [PassportAuthController::class, 'userLists']);
+    Route::post('changepassword', [PassportAuthController::class, 'changePassword']);
     Route::post('logout', [PassportAuthController::class, 'logout']);
     Route::resource('posts', PostController::class);
     Route::resource('users',PassportAuthController::class);
