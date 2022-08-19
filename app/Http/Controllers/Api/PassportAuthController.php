@@ -12,6 +12,7 @@ use App\Http\Requests\UserRegisterRequest;
 use App\Http\Requests\UserLoginRequest;
 use App\Http\Requests\UserCreateRequest;
 use App\Http\Requests\PasswordChangeRequest;
+use App\Http\Requests\UserUpdateRequest;
 use App\Contracts\Services\UserServiceInterface;
 
 class PassportAuthController extends Controller
@@ -79,24 +80,11 @@ class PassportAuthController extends Controller
 
     //update
 
-    public function updateUser(Request $request,$id,User $user)
+    public function updateUser(UserUpdateRequest $request)
     {
-        $input = $request->all();
-        $validator = Validator::make($input, [
-           'name' => 'required',
-           'email' => [Rule::unique("users","email")->ignore($id),'required'],
-           'type' => 'required',
-           'phone' => 'required|numeric|regex:/(09)[0-9]{9}/',
-        ]);
-        if($validator->fails()){
-            return response()->json([
-                'success' => false,
-                'message' => 'Wrong',
-                'errors' => $validator->errors()
-            ],422);
-        }
+        $request->validated();
 
-        $user = $this->userService->update($request,$id,$user);
+        $user = $this->userService->update($request);
 
         return response()->json([
         "success" => true,
@@ -160,17 +148,17 @@ class PassportAuthController extends Controller
     {
         $user = $this->userService->changePassword($request);
 
-        if(!$user){
+        if($user){
             return response()->json([
-                "success" => false,
-                "message" => "Old passsword is invalid"
-            ],400);
+                "success" => true,
+                "message" => "Password can be changed successfully",
+                "data" => $user
+            ],200);
         }
         return response()->json([
-            "success" => true,
-            "message" => "Password can be changed successfully",
-            "data" => $user
-        ],200);
+                "success" => false,
+                "message" => "Old passsword is invalid"
+        ],400);
     }
 }
 

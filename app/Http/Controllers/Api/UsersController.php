@@ -11,10 +11,15 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Requests\UserImportRequest;
+use App\Contracts\Services\UserServiceInterface;
 
 class UsersController extends Controller
 {
-
+    private $userService;
+    public function __construct(UserServiceInterface $userService)
+    {
+        $this->userService = $userService;
+    }
     //import
     public function import(UserImportRequest $request)
     {
@@ -28,9 +33,10 @@ class UsersController extends Controller
     }
 
     //export
-    public function export()
+    public function export(Request $request)
     {
-        return Excel::download(new UsersExport, 'users.xlsx');
+        $user = $this->userService->search($request);
+        return Excel::download(new UsersExport($user), 'users.xlsx');
     }
 
 }

@@ -54,11 +54,11 @@ class UserDao implements UserDaoInterface
         return $user;
     }
 
-    public function update($request,$id,$post)
+    public function update($request)
     {
         $input = $request->all();
 
-        $user = User::find($id);
+        $user = User::find($request->id);
 
         if($request->hasFile('image')){
             $file = $request->file('image');
@@ -84,6 +84,8 @@ class UserDao implements UserDaoInterface
     public function delete($user)
     {
         if($user){
+            $file = $user['image'];
+            \File::delete($file);
             $user = User::where('id', $user['id'])->delete();
         }
 

@@ -5,8 +5,10 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Validation\Rule;
+use Carbon\Carbon;
 
-class PostCreateRequest extends FormRequest
+class UserUpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,10 +27,14 @@ class PostCreateRequest extends FormRequest
      */
     public function rules()
     {
+        $dt = new Carbon();
+        $before = $dt->subYears(16)->format('Y/m/d');
         return [
-            'title' => 'required|max:50|unique:posts',
-            'description' => 'required|max:250',
-            'user_id' => 'required'
+            'name' => 'required',
+            'email' => [Rule::unique("users","email")->ignore(request("id")),'required'],
+            'type' => 'required',
+            'phone' => 'required|numeric|regex:/(09)[0-9]{9}/',
+            'dob'=>'nullable|date|before:' . $before
         ];
     }
 
@@ -41,10 +47,10 @@ class PostCreateRequest extends FormRequest
         ],422));
     }
 
-    // public function messages()
-    // {
-    //     return [
-    //         'title.required' => 'Title is required',
-    //     ];
-    // }
+    public function messages()
+    {
+        return [
+            'dob.before' => "Your age must be greater than 16",
+        ];
+    }
 }

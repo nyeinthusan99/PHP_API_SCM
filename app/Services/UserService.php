@@ -27,9 +27,9 @@ class UserService implements UserServiceInterface
         return $this->userDao->userInfo($request);
     }
 
-    public function update($request,$id,$post)
+    public function update($request)
     {
-        return $this->userDao->update($request,$id,$post);
+        return $this->userDao->update($request);
     }
 
     public function delete($user)

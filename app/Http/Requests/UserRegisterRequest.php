@@ -5,6 +5,8 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
+use Carbon\Carbon;
+
 class UserRegisterRequest extends FormRequest
 {
     /**
@@ -24,11 +26,14 @@ class UserRegisterRequest extends FormRequest
      */
     public function rules()
     {
+        $dt = new Carbon();
+        $before = $dt->subYears(16)->format('Y/m/d');
         return [
             'name' => 'required|string',
             'email' => 'required|email|unique:users',
             'password' => 'required|min:8',
             'phone' => 'required|numeric|regex:/(09)[0-9]{9}/',
+            'dob'=>'nullable|date|before:' . $before
         ];
     }
 
@@ -39,5 +44,12 @@ class UserRegisterRequest extends FormRequest
             'message' => 'Validation Error!',
             'errors' => $validator->errors()
         ],422));
+    }
+
+    public function messages()
+    {
+        return [
+            'dob.before' => "Your age must be greater than 16",
+        ];
     }
 }

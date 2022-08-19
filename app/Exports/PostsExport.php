@@ -10,22 +10,23 @@ use Maatwebsite\Excel\Concerns\WithHeadings;
 class PostsExport implements FromCollection,WithHeadings
 {
     //private $user;
-    public function  __construct($id)
+    public function  __construct($posts)
     {
-       $this->user_id = $id;
+       $this->posts = $posts;
     }
     public function collection()
     {
-
-        $user = User::where('id', $this->user_id)->get();
-
-        if ($user[0]->type == 0) {
-           $post = Post::select('title', 'description')->get();
-        } else {
-           $post = Post::select('title', 'description')->where('user_id', $this->user_id)->get();
-        }
-        return $post;
+        return $this->posts;
+        //return $this->posts;
     }
+
+    // public function map($posts): array
+    // {
+    //     return[
+    //         $posts->title,
+    //         $posts->description
+    //     ];
+    // }
 
     public function headings(): array
     {

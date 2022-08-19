@@ -12,6 +12,7 @@ use App\Imports\PostsImport;
 use Illuminate\Validation\Rule;
 use App\Http\Requests\PostCreateRequest;
 use App\Http\Requests\PostImportRequest;
+use App\Http\Requests\PostUpdateRequest;
 use Illuminate\Support\Facades\Validator;
 
 use App\Contracts\Services\PostServiceInterface;
@@ -34,9 +35,9 @@ class PostController extends Controller
     //create
     public function store(PostCreateRequest $request)
     {
-        $request->validated();
 
-        $post = $this->postService->create($request);
+        $input = $request->validated();
+        $post = $this->postService->create($input);
         return response()->json([
         "success" => true,
         "message" => "Post created successfully.",
@@ -63,24 +64,12 @@ class PostController extends Controller
 
 
     //update
-    public function update(Request $request,Post $post)
+    public function update(PostUpdateRequest $request)
     {
 
-        $input = $request->all();
-        $validator = Validator::make($input, [
-        'title' => [Rule::unique("posts","title")->ignore($post->id),'required','max:50'],
-        'description' => 'required|max:250',
-        'user_id' => 'required'
-        ]);
-        if($validator->fails()){
-            return response()->json([
-                'success' => false,
-                'message' => 'Wrong',
-                'errors' => $validator->errors()
-            ],422);
-        }
+        $request->validated();
 
-        $post = $this->postService->update($request,$post);
+        $post = $this->postService->update($request);
         return response()->json([
         "success" => true,
         "message" => "Post updated successfully.",
@@ -113,9 +102,13 @@ class PostController extends Controller
     }
 
     //export
-    public function export($id)
+    public function export(Request $request)
     {
-        return Excel::download(new PostsExport($id),'posts.xlsx');
+        \Log::info($request);
+        $posts = $this->postService->index($request);
+        \Log::info($posts);
+        return Excel::download(new PostsExport($posts),'posts.xlsx');
+
     }
 
 }

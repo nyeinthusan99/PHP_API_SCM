@@ -5,8 +5,8 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
-
-class PostCreateRequest extends FormRequest
+use Illuminate\Validation\Rule;
+class PostUpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,7 +26,7 @@ class PostCreateRequest extends FormRequest
     public function rules()
     {
         return [
-            'title' => 'required|max:50|unique:posts',
+            'title' => [Rule::unique("posts","title")->ignore(request("id")),'required','max:50'],
             'description' => 'required|max:250',
             'user_id' => 'required'
         ];
@@ -40,11 +40,4 @@ class PostCreateRequest extends FormRequest
             'errors' => $validator->errors()
         ],422));
     }
-
-    // public function messages()
-    // {
-    //     return [
-    //         'title.required' => 'Title is required',
-    //     ];
-    // }
 }

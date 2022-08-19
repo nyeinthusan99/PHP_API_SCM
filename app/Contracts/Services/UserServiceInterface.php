@@ -11,7 +11,7 @@ interface UserServiceInterface
 
     public function userInfo($request);
 
-    public function update($request,$id,$post);
+    public function update($request);
 
     public function delete($user);
 

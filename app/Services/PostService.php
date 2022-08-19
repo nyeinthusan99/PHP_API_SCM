@@ -3,7 +3,6 @@
 namespace App\Services;
 use App\Contracts\Services\PostServiceInterface;
 use App\Contracts\Dao\PostDaoInterface;
-use Illuminate\Http\Request;
 
 class PostService implements PostServiceInterface
 {
@@ -18,9 +17,9 @@ class PostService implements PostServiceInterface
         return $this->postDao->index($request);
     }
 
-    public function create($request)
+    public function create(array $data)
     {
-        return $this->postDao->create($request);
+        return $this->postDao->create($data);
     }
 
     public function show($request)
@@ -28,9 +27,9 @@ class PostService implements PostServiceInterface
         return $this->postDao->show($request);
     }
 
-    public function update($request,$post)
+    public function update($request)
     {
-        return $this->postDao->update($request,$post);
+        return $this->postDao->update($request);
     }
 
     public function delete($post)

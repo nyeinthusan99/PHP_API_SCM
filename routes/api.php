@@ -26,7 +26,7 @@ Route::post('password/reset', [ResetPasswordController::class, 'sendResetRespons
 
 Route::post('users/import',[UsersController::class,'import']);
 Route::get('users/export', [UsersController::class, 'export']);
-Route::get('posts/export/{id}', [PostController::class, 'export']);
+Route::get('posts/export', [PostController::class, 'export']);
 
 Route::middleware('auth:api')->group(function () {
     Route::get('getUser', [PassportAuthController::class, 'userInfo']);
@@ -34,8 +34,9 @@ Route::middleware('auth:api')->group(function () {
     Route::post('changepassword', [PassportAuthController::class, 'changePassword']);
     Route::post('logout', [PassportAuthController::class, 'logout']);
     Route::resource('posts', PostController::class);
+    Route::post('updatePost',[PostController::class,'update']);
     Route::resource('users',PassportAuthController::class);
-    Route::post('updateUser/{id}',[PassportAuthController::class,'updateUser']);
+    Route::post('updateUser',[PassportAuthController::class,'updateUser']);
     Route::post('posts/import',[PostController::class,'import']);
 });
 

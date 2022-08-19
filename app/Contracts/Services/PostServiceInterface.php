@@ -7,11 +7,11 @@ interface PostServiceInterface
 {
     public function index($request);
 
-    public function create($request);
+    public function create(array $data);
 
     public function show($id);
 
-    public function update($request,$post);
+    public function update($request);
 
     public function delete($post);
 

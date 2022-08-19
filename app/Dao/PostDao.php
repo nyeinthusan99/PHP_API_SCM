@@ -2,30 +2,29 @@
 
 namespace App\Dao;
 use App\Models\Post;
-use Illuminate\Http\Request;
 use App\Contracts\Dao\PostDaoInterface;
 
 class PostDao implements PostDaoInterface
 {
     public function index($request)
     {
+        \Log::info($request);
         $posts = Post::where('title', 'LIKE', '%'. request('title') .'%')
                 ->when($request['description'], function($query) {
                  $query->where('description', 'LIKE', '%' . request('description') . '%');
-                })->when(request()->user()->type!=0,function($query){
-                    $query->where('user_id',request()->user()->id);
+                })->when($request['type'] !=0,function($query){
+                    $query->where('user_id',auth()->user()->id);
                 })->orderBy('id','DESC')->paginate(5)->withQueryString();
 
         return $posts;
     }
 
-    public function create($request)
+    public function create(array $data)
     {
-        $input = $request->all();
         $post = Post::create([
-            'title' => $input['title'],
-            'description' => $input['description'],
-            'user_id' => $input['user_id'],
+            'title' => $data['title'],
+            'description' => $data['description'],
+            'user_id' => $data['user_id'],
         ]);
         return $post;
     }
@@ -36,9 +35,10 @@ class PostDao implements PostDaoInterface
          return $post;
     }
 
-    public function update($request,$post)
+    public function update($request)
     {
         $input = $request->all();
+        $post = Post::find($input['id']);
 
         $post->title = $input['title'];
         $post->description = $input['description'];
@@ -46,6 +46,7 @@ class PostDao implements PostDaoInterface
         $post->save();
 
         return $post;
+
     }
 
     public function delete($post)

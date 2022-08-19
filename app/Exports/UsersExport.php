@@ -11,10 +11,20 @@ class UsersExport implements FromCollection,WithHeadings
     /**
     * @return \Illuminate\Support\Collection
     */
+    public function  __construct($user)
+    {
+       $this->user = $user;
+    }
+
     public function collection()
     {
-        $user = User::select('name','email','type','phone','address','dob')->get();
-        for($i=0;$i<count($user);$i++){
+        // $user = User::select('name','email','type','phone','address','dob')->get();
+
+
+        // return $user;
+            $user =$this->user->select('name','email','type','phone','address','dob')->get();
+            
+             for($i=0;$i<count($user);$i++){
         if($user[$i]->type == 0){
             $user[$i]->type = 'Admin';
         }else{
@@ -23,6 +33,7 @@ class UsersExport implements FromCollection,WithHeadings
         }
         return $user;
     }
+
     public function headings(): array
     {
         return [
