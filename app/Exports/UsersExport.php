@@ -6,6 +6,7 @@ use App\Models\User;
 use Maatwebsite\Excel\Concerns\WithMapping;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\FromCollection;
+use Carbon\Carbon;
 
 class UsersExport implements FromCollection,WithHeadings,WithMapping
 {
@@ -32,6 +33,15 @@ class UsersExport implements FromCollection,WithHeadings,WithMapping
                     $user[$i]->type = 'User';
                 }
             }
+
+            for($j=0;$j<count($user);$j++){
+             if($user[$j]->dob){
+                $user[$j]->dob =  Carbon::parse($user[$j]->dob)->format('Y/m/d');
+             };
+            }
+        
+            \Log::info($user);
+
         return $user;
     }
 

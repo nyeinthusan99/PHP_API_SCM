@@ -32,7 +32,7 @@ class PostsImport implements  ToCollection,WithValidation,WithHeadingRow
     public function rules(): array
     {
         return [
-            '*.title' => 'required|max:50|unique:posts',
+            '*.title' => ['required','max:50',Rule::unique("posts","title")],
             '*.description' => 'required',
         ];
     }

@@ -47,7 +47,7 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
-        'dob' => 'datetime:Y/m/d'
+        //'dob' => 'datetime:Y/m/d'
     ];
 
     public function sendPasswordResetNotification($token)

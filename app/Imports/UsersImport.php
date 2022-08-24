@@ -8,6 +8,9 @@ use Maatwebsite\Excel\Concerns\WithValidation;
 use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
+use App\Rules\PhoneNumber;
+use Carbon\Carbon;
 
 class UsersImport implements ToCollection,WithHeadingRow,WithValidation
 {
@@ -30,11 +33,21 @@ class UsersImport implements ToCollection,WithHeadingRow,WithValidation
 
     public function rules(): array
     {
+        $dt = new Carbon();
+        $before = $dt->subYears(16)->format('Y/m/d');
         return [
             '*.name' => 'required',
-            '*.email' => 'required|email|unique:users',
+            '*.email' => ['required','email',Rule::unique("users","email")->whereNull('deleted_at')],
             '*.password' => 'required|min:8',
-            '*.phone' => 'required|numeric|regex:/(09)[0-9]{9}/'
+            '*.phone' => ['required','numeric',new PhoneNumber],
+            '*.dob'=>'nullable|date|before:' . $before
+        ];
+    }
+
+    public function customValidationMessages()
+    {
+        return [
+            'dob.before' => "Age must be greater than 16",
         ];
     }
 }

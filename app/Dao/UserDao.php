@@ -101,7 +101,7 @@ class UserDao implements UserDaoInterface
         if(isset($request->type)){
             $user = User::where('type',request('type'));
         }
-        return $user->orderBy('id','DESC')->paginate(3);
+        return $user->orderBy(request('sort_field','id'),request('sort_direction','desc'))->paginate(3);
     }
 
     public function create($request)
@@ -139,7 +139,6 @@ class UserDao implements UserDaoInterface
     public function changePassword($request)
     {
         $user = User::find($request->user()->id);
-        //return $request->user()->id;
         if(!Hash::check($request['oldPassword'],$user->password)){
             return false;
         }else{

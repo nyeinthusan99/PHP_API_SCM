@@ -5,6 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Validation\Rule;
 
 class PostCreateRequest extends FormRequest
 {
@@ -26,7 +27,7 @@ class PostCreateRequest extends FormRequest
     public function rules()
     {
         return [
-            'title' => 'required|max:50|unique:posts',
+            'title' => ['required','max:50',Rule::unique("posts","title")],
             'description' => 'required|max:250',
             'user_id' => 'required'
         ];

@@ -6,6 +6,8 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Carbon\Carbon;
+use Illuminate\Validation\Rule;
+use App\Rules\PhoneNumber;
 
 class UserRegisterRequest extends FormRequest
 {
@@ -30,9 +32,9 @@ class UserRegisterRequest extends FormRequest
         $before = $dt->subYears(16)->format('Y/m/d');
         return [
             'name' => 'required|string',
-            'email' => 'required|email|unique:users',
+            'email' => ['required','email',Rule::unique("users","email")->whereNull('deleted_at')],
             'password' => 'required|min:8',
-            'phone' => 'required|numeric|regex:/(09)[0-9]{9}/',
+            'phone' => ['required','numeric',new PhoneNumber],
             'dob'=>'nullable|date|before:' . $before
         ];
     }

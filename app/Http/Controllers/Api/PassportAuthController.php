@@ -14,6 +14,7 @@ use App\Http\Requests\UserCreateRequest;
 use App\Http\Requests\PasswordChangeRequest;
 use App\Http\Requests\UserUpdateRequest;
 use App\Contracts\Services\UserServiceInterface;
+use Carbon\Carbon;
 
 class PassportAuthController extends Controller
 {
@@ -111,6 +112,12 @@ class PassportAuthController extends Controller
     public function userLists(Request $request)
     {
         $user = $this->userService->search($request);
+
+        for($j=0;$j<count($user);$j++){
+            if($user[$j]->dob){
+               $user[$j]->dob =  Carbon::parse($user[$j]->dob)->format('Y/m/d');
+            };
+           }
         return $user;
     }
 

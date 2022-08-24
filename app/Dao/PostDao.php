@@ -8,7 +8,6 @@ class PostDao implements PostDaoInterface
 {
     public function index($request)
     {
-        \Log::info($request);
         $posts = Post::where('title', 'LIKE', '%'. request('title') .'%')
                 ->when($request['description'], function($query) {
                  $query->where('description', 'LIKE', '%' . request('description') . '%');
@@ -31,7 +30,7 @@ class PostDao implements PostDaoInterface
 
     public function show($id)
     {
-         $post = Post::find($id);
+         $post = Post::where('id',$id)->with('user')->first();
          return $post;
     }
 
