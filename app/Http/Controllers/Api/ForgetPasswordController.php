@@ -27,15 +27,21 @@ class ForgetPasswordController extends Controller
             $response = $this->forgotService->forgot($request);
 
             if($response == Password::RESET_LINK_SENT){
-              $message = "Mail send successfully";
+              return response()->json([
+                'success' => true,
+                "message" => "Mail send successfully"
+            ], 200);
             }
             else{
-              $message = "Email could not be sent to this email address";
+              return response()->json([
+                'success' => false,
+                "message" => "Email could not be sent to this email address"
+            ], 400);
             }
 
-            $response = ['message' => $message];
+            //$response = ['message' => $message];
 
-            return response($response, 200);
+            //return response($response, 200);
         }
 }
 

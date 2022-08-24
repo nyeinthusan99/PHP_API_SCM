@@ -19,13 +19,15 @@ class MailResetPasswordNotification extends Notification
      *
      * @return void
      */
-    public function __construct(string $url)
+    public function __construct(string $token)
     {
-        $this->url = $url;
+        $this->token = $token;
         //parent::__construct($token);
         //$this->pageUrl = '127.0.0.1:8000';
 
     }
+
+
 
     /**
      * Get the notification's delivery channels.
@@ -46,9 +48,10 @@ class MailResetPasswordNotification extends Notification
      */
     public function toMail($notifiable)
     {
+        $link = url( "http://localhost:8080/resetpassword/".$this->token );
         return (new MailMessage)
                      ->line('Forget Password?')
-                     ->action('Click to reset', $this->url)
+                     ->action('Click to reset', $link)
                     ->line('Thank you for using our application!');
                     // ->subject(Lang::getFromJson('Reset application Password v1'))
                     // ->line(Lang::getFromJson('You are receiving this email because we received a password reset request for your account.'))

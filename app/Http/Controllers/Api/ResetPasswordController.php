@@ -24,14 +24,20 @@ class ResetPasswordController extends Controller
         $response = $this->forgotService->reset($request);
 
         if($response == Password::PASSWORD_RESET){
-            $message = "Password reset successfully";
+            return response()->json([
+                'success' => true,
+                "message" => "Password reset successfully"
+            ], 200);
         }else{
-            $message = "Email could not be sent to this email address";
+            return response()->json([
+                'success' => true,
+                "message" => "Email could not be sent to this email address"
+            ], 400);
         }
 
-        $response = ['message' => $message];
+        // $response = ['message' => $message];
 
-        return response()->json($response);
+        // return response()->json($response,200);
 
     }
 }

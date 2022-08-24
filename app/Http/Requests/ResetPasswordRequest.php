@@ -28,14 +28,17 @@ class ResetPasswordRequest extends FormRequest
         return [
             'token' => 'required',
             'email' => 'required|email',
-            'password' => 'required|confirmed|min:8',
+            'password' => 'required|min:8',
+            'password_confirmation' => 'required|same:password'
         ];
     }
 
     public function failedValidation(Validator $validator)
     {
         throw new HttpResponseException(response()->json([
-            'errors' => $validator->errors()->all()
+            'success' => false,
+            'message' => 'Validation Error!',
+            'errors' => $validator->errors()
         ],422));
     }
 }
