@@ -8,11 +8,12 @@ class PostDao implements PostDaoInterface
 {
     public function index($request)
     {
+        \Log::info($request);
         $posts = Post::where('title', 'LIKE', '%'. request('title') .'%')
                 ->when($request['description'], function($query) {
                  $query->where('description', 'LIKE', '%' . request('description') . '%');
                 })->when($request['type'] !=0,function($query){
-                    $query->where('user_id',auth()->user()->id);
+                    $query->where('user_id',request('id'));
                 })->orderBy('id','DESC')->paginate(5)->withQueryString();
 
         return $posts;
