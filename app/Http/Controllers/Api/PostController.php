@@ -28,7 +28,6 @@ class PostController extends Controller
     //to get post list & search
     public function index(Request $request)
     {
-        \Log::info($request);
         $posts = $this->postService->index($request);
         return $posts;
     }
@@ -105,9 +104,7 @@ class PostController extends Controller
     //export
     public function export(Request $request)
     {
-        \Log::info($request);
         $posts = $this->postService->index($request);
-
         return Excel::download(new PostsExport($posts),'posts.xlsx');
 
     }
