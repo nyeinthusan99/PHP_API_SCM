@@ -94,6 +94,7 @@ class UserDao implements UserDaoInterface
 
     public function search($request)
     {
+        \Log::info($request);
         $user = User::where('name','LIKE','%'.request('name').'%');
         if(isset($request->email)){
             $user = User::where('email','LIKE','%'.request('email').'%');

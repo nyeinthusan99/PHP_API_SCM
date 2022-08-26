@@ -36,7 +36,7 @@ class UsersController extends Controller
     public function export(Request $request)
     {
         $user = $this->userService->search($request);
-       
+
         return Excel::download(new UsersExport($user), 'users.xlsx');
     }
 
